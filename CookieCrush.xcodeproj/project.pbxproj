@@ -18,6 +18,13 @@
 		6EF40A931ADDC35200AF8D0E /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40A921ADDC35200AF8D0E /* Sprites.atlas */; };
 		6EF40A961ADDCAED00AF8D0E /* Cookie.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A951ADDCAED00AF8D0E /* Cookie.m */; };
 		6EF40A991ADDDB6400AF8D0E /* Level.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A981ADDDB6400AF8D0E /* Level.m */; };
+		6EF40A9C1ADDF55900AF8D0E /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A9B1ADDF55900AF8D0E /* Tile.m */; };
+		6EF40AA31ADE069F00AF8D0E /* Level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40A9E1ADE069F00AF8D0E /* Level_0.json */; };
+		6EF40AA41ADE069F00AF8D0E /* Level_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40A9F1ADE069F00AF8D0E /* Level_1.json */; };
+		6EF40AA51ADE069F00AF8D0E /* Level_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40AA01ADE069F00AF8D0E /* Level_2.json */; };
+		6EF40AA61ADE069F00AF8D0E /* Level_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40AA11ADE069F00AF8D0E /* Level_3.json */; };
+		6EF40AA71ADE069F00AF8D0E /* Level_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EF40AA21ADE069F00AF8D0E /* Level_4.json */; };
+		6EF40AAA1ADEE1E800AF8D0E /* Swap.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40AA91ADEE1E700AF8D0E /* Swap.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +58,15 @@
 		6EF40A951ADDCAED00AF8D0E /* Cookie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cookie.m; sourceTree = "<group>"; };
 		6EF40A971ADDDB6400AF8D0E /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Level.h; sourceTree = "<group>"; };
 		6EF40A981ADDDB6400AF8D0E /* Level.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Level.m; sourceTree = "<group>"; };
+		6EF40A9A1ADDF55800AF8D0E /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
+		6EF40A9B1ADDF55900AF8D0E /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
+		6EF40A9E1ADE069F00AF8D0E /* Level_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_0.json; sourceTree = "<group>"; };
+		6EF40A9F1ADE069F00AF8D0E /* Level_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_1.json; sourceTree = "<group>"; };
+		6EF40AA01ADE069F00AF8D0E /* Level_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_2.json; sourceTree = "<group>"; };
+		6EF40AA11ADE069F00AF8D0E /* Level_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_3.json; sourceTree = "<group>"; };
+		6EF40AA21ADE069F00AF8D0E /* Level_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_4.json; sourceTree = "<group>"; };
+		6EF40AA81ADEE1E700AF8D0E /* Swap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swap.h; sourceTree = "<group>"; };
+		6EF40AA91ADEE1E700AF8D0E /* Swap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Swap.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,14 +112,19 @@
 				6EF40A6C1ADDC29500AF8D0E /* AppDelegate.m */,
 				6EF40A6E1ADDC29600AF8D0E /* GameScene.h */,
 				6EF40A6F1ADDC29600AF8D0E /* GameScene.m */,
+				6EF40AA81ADEE1E700AF8D0E /* Swap.h */,
+				6EF40AA91ADEE1E700AF8D0E /* Swap.m */,
 				6EF40A941ADDCAED00AF8D0E /* Cookie.h */,
 				6EF40A951ADDCAED00AF8D0E /* Cookie.m */,
 				6EF40A971ADDDB6400AF8D0E /* Level.h */,
 				6EF40A981ADDDB6400AF8D0E /* Level.m */,
+				6EF40A9A1ADDF55800AF8D0E /* Tile.h */,
+				6EF40A9B1ADDF55900AF8D0E /* Tile.m */,
 				6EF40A731ADDC29600AF8D0E /* GameViewController.h */,
 				6EF40A741ADDC29600AF8D0E /* GameViewController.m */,
 				6EF40A761ADDC29600AF8D0E /* Main.storyboard */,
 				6EF40A791ADDC29600AF8D0E /* Images.xcassets */,
+				6EF40A9D1ADE069F00AF8D0E /* Levels */,
 				6EF40A921ADDC35200AF8D0E /* Sprites.atlas */,
 				6EF40A7B1ADDC29600AF8D0E /* LaunchScreen.xib */,
 				6EF40A671ADDC29500AF8D0E /* Supporting Files */,
@@ -135,6 +156,18 @@
 				6EF40A871ADDC29700AF8D0E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6EF40A9D1ADE069F00AF8D0E /* Levels */ = {
+			isa = PBXGroup;
+			children = (
+				6EF40A9E1ADE069F00AF8D0E /* Level_0.json */,
+				6EF40A9F1ADE069F00AF8D0E /* Level_1.json */,
+				6EF40AA01ADE069F00AF8D0E /* Level_2.json */,
+				6EF40AA11ADE069F00AF8D0E /* Level_3.json */,
+				6EF40AA21ADE069F00AF8D0E /* Level_4.json */,
+			);
+			path = Levels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,8 +251,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EF40A7D1ADDC29600AF8D0E /* LaunchScreen.xib in Resources */,
+				6EF40AA71ADE069F00AF8D0E /* Level_4.json in Resources */,
+				6EF40AA51ADE069F00AF8D0E /* Level_2.json in Resources */,
+				6EF40AA31ADE069F00AF8D0E /* Level_0.json in Resources */,
 				6EF40A7A1ADDC29600AF8D0E /* Images.xcassets in Resources */,
 				6EF40A781ADDC29600AF8D0E /* Main.storyboard in Resources */,
+				6EF40AA41ADE069F00AF8D0E /* Level_1.json in Resources */,
+				6EF40AA61ADE069F00AF8D0E /* Level_3.json in Resources */,
 				6EF40A931ADDC35200AF8D0E /* Sprites.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,7 +280,9 @@
 				6EF40A751ADDC29600AF8D0E /* GameViewController.m in Sources */,
 				6EF40A6D1ADDC29500AF8D0E /* AppDelegate.m in Sources */,
 				6EF40A701ADDC29600AF8D0E /* GameScene.m in Sources */,
+				6EF40AAA1ADEE1E800AF8D0E /* Swap.m in Sources */,
 				6EF40A6A1ADDC29500AF8D0E /* main.m in Sources */,
+				6EF40A9C1ADDF55900AF8D0E /* Tile.m in Sources */,
 				6EF40A961ADDCAED00AF8D0E /* Cookie.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

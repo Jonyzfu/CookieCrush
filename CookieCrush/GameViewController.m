@@ -66,8 +66,27 @@
     self.scene.scaleMode = SKSceneScaleModeAspectFill;
     
     // Load the level.
-    self.level = [[Level alloc] init];
+    self.level = [[Level alloc] initWithFile:@"Level_1"];
     self.scene.level = self.level;
+    
+    // Load the Tile.
+    [self.scene addTiles];
+    
+    // Create the block and assign it to Scene's swipeHandler property
+    id block = ^(Swap *swap) {
+        // While the animation is happening, it's not able to touch anything else
+        self.view.userInteractionEnabled = NO;
+        
+        // Update the data model
+        [self.level performSwap:swap];
+        
+        // Update the view
+        [self.scene animateSwap:swap completion:^{
+            self.view.userInteractionEnabled = YES;
+        }];
+    };
+    
+    self.scene.swipeHandler = block;
     
     // Present the scene.
     [skView presentScene:self.scene];
