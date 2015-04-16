@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>CB9B0F18-D094-4B5E-89D2-408C78667BA6</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>CookieCrush</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>FD7B0FEF0F30ABF56F9268A032F6852EC6552EEC</key>
 		<string>https://github.com/Jonyzfu/CookieCrush.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>CookieCrush.xcodeproj/project.xcworkspace</string>
+	<string>CookieCrush.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>FD7B0FEF0F30ABF56F9268A032F6852EC6552EEC</key>

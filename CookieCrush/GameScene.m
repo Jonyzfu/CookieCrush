@@ -34,6 +34,7 @@ static const CGFloat TileHeight = 36.0;
         SKSpriteNode *background = [SKSpriteNode spriteNodeWithImageNamed:@"Background"];
         [self addChild:background];
         self.swipeFromColumn = self.swipeFromRow = NSNotFound;
+        [self preloadResources];
     }
     
     self.gameLayer = [SKNode node];
@@ -150,7 +151,7 @@ static const CGFloat TileHeight = 36.0;
     if ([self convertPoint:location toColumn:&column row:&row]) {
         // Figure out the direction of the player's swipe by comparing the new column and
         // row numbers to the previous ones
-        NSInteger horzDelta, vertDelta = 0;
+        NSInteger horzDelta = 0, vertDelta = 0;
         if (column < self.swipeFromColumn) {
             horzDelta = -1;
         } else if (column > self.swipeFromColumn) {
@@ -217,6 +218,7 @@ static const CGFloat TileHeight = 36.0;
     SKAction *moveB = [SKAction moveTo:swap.cookieA.sprite.position duration:duration];
     moveB.timingMode = SKActionTimingEaseOut;
     [swap.cookieB.sprite runAction:moveB];
+    [self runAction:self.swapSound];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -227,7 +229,31 @@ static const CGFloat TileHeight = 36.0;
     [self touchesEnded:touches withEvent:event];
 }
 
+- (void)animateInvalidSwap:(Swap *)swap completion:(dispatch_block_t)completion {
+    swap.cookieA.sprite.zPosition = 100;
+    swap.cookieB.sprite.zPosition = 90;
+    
+    const NSTimeInterval duration = 0.2;
+    
+    SKAction *moveA = [SKAction moveTo:swap.cookieB.sprite.position duration:duration];
+    moveA.timingMode = SKActionTimingEaseOut;
+    
+    SKAction *moveB = [SKAction moveTo:swap.cookieA.sprite.position duration:duration];
+    moveB.timingMode = SKActionTimingEaseOut;
+    
+    [swap.cookieA.sprite runAction:[SKAction sequence:@[moveA, moveB, [SKAction runBlock:completion]]]];
+    [swap.cookieB.sprite runAction:[SKAction sequence:@[moveB, moveA]]];
+    [self runAction:self.invalidSwapSound];
+}
 
+#pragma mark - Sounds Effection
+- (void)preloadResources {
+    self.swapSound = [SKAction playSoundFileNamed:@"Chomp.wav" waitForCompletion:NO];
+    self.invalidSwapSound = [SKAction playSoundFileNamed:@"Error.wav" waitForCompletion:NO];
+    self.matchSound = [SKAction playSoundFileNamed:@"Ka-Ching.wav" waitForCompletion:NO];
+    self.fallingCookieSound = [SKAction playSoundFileNamed:@"Scrape.wav" waitForCompletion:NO];
+    self.addCookieSound = [SKAction playSoundFileNamed:@"Drip.wav" waitForCompletion:NO];
+}
 
 
 

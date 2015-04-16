@@ -77,13 +77,19 @@
         // While the animation is happening, it's not able to touch anything else
         self.view.userInteractionEnabled = NO;
         
-        // Update the data model
-        [self.level performSwap:swap];
-        
-        // Update the view
-        [self.scene animateSwap:swap completion:^{
-            self.view.userInteractionEnabled = YES;
-        }];
+        if ([self.level isPossibleSwap:swap]) {
+            // Update the data model
+            [self.level performSwap:swap];
+            
+            // Update the view
+            [self.scene animateSwap:swap completion:^{
+                self.view.userInteractionEnabled = YES;
+            }];
+        } else {
+            [self.scene animateInvalidSwap:swap completion:^ {
+                self.view.userInteractionEnabled = YES;
+            }];
+        }
     };
     
     self.scene.swipeHandler = block;

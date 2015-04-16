@@ -20,8 +20,16 @@
 
 @property(strong, nonatomic) SKSpriteNode *selectionSprite;
 
+// Sounds properties
+@property (strong, nonatomic) SKAction *swapSound;
+@property (strong, nonatomic) SKAction *invalidSwapSound;
+@property (strong, nonatomic) SKAction *matchSound;
+@property (strong, nonatomic) SKAction *fallingCookieSound;
+@property (strong, nonatomic) SKAction *addCookieSound;
+
 - (void)addSpritesForCookies:(NSSet *)cookies;
 - (void)addTiles;
 - (void)animateSwap:(Swap *)swap completion:(dispatch_block_t)completion;
+- (void)animateInvalidSwap:(Swap *)swap completion:(dispatch_block_t)completion;
 
 @end
