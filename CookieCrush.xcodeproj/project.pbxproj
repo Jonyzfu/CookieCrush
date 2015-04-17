@@ -13,6 +13,7 @@
 		6EDCF9D01AE037FC004135F0 /* Ka-Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9CA1AE037FC004135F0 /* Ka-Ching.wav */; };
 		6EDCF9D11AE037FC004135F0 /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9CB1AE037FC004135F0 /* Mining by Moonlight.mp3 */; };
 		6EDCF9D21AE037FC004135F0 /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9CC1AE037FC004135F0 /* Scrape.wav */; };
+		6EDCF9D51AE0B427004135F0 /* Chain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EDCF9D41AE0B427004135F0 /* Chain.m */; };
 		6EF40A6A1ADDC29500AF8D0E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A691ADDC29500AF8D0E /* main.m */; };
 		6EF40A6D1ADDC29500AF8D0E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A6C1ADDC29500AF8D0E /* AppDelegate.m */; };
 		6EF40A701ADDC29600AF8D0E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EF40A6F1ADDC29600AF8D0E /* GameScene.m */; };
@@ -50,6 +51,8 @@
 		6EDCF9CA1AE037FC004135F0 /* Ka-Ching.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ka-Ching.wav"; sourceTree = "<group>"; };
 		6EDCF9CB1AE037FC004135F0 /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		6EDCF9CC1AE037FC004135F0 /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
+		6EDCF9D31AE0B427004135F0 /* Chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chain.h; sourceTree = "<group>"; };
+		6EDCF9D41AE0B427004135F0 /* Chain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chain.m; sourceTree = "<group>"; };
 		6EF40A641ADDC29500AF8D0E /* CookieCrush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookieCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EF40A681ADDC29500AF8D0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EF40A691ADDC29500AF8D0E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 				6EF40A6C1ADDC29500AF8D0E /* AppDelegate.m */,
 				6EF40A6E1ADDC29600AF8D0E /* GameScene.h */,
 				6EF40A6F1ADDC29600AF8D0E /* GameScene.m */,
+				6EDCF9D31AE0B427004135F0 /* Chain.h */,
+				6EDCF9D41AE0B427004135F0 /* Chain.m */,
 				6EF40AA81ADEE1E700AF8D0E /* Swap.h */,
 				6EF40AA91ADEE1E700AF8D0E /* Swap.m */,
 				6EF40A941ADDCAED00AF8D0E /* Cookie.h */,
@@ -314,6 +319,7 @@
 				6EF40A701ADDC29600AF8D0E /* GameScene.m in Sources */,
 				6EF40AAA1ADEE1E800AF8D0E /* Swap.m in Sources */,
 				6EF40A6A1ADDC29500AF8D0E /* main.m in Sources */,
+				6EDCF9D51AE0B427004135F0 /* Chain.m in Sources */,
 				6EF40A9C1ADDF55900AF8D0E /* Tile.m in Sources */,
 				6EF40A961ADDCAED00AF8D0E /* Cookie.m in Sources */,
 			);

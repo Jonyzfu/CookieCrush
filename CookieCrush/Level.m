@@ -226,4 +226,74 @@ Tile *_tiles[NumColumns][NumRows];
     return dictionary;
 }
 
+#pragma mark - Scan Cookies Matches
+- (NSSet *)detectHorizontalMatches {
+    // Create the set to hold the horizontal chains
+    NSMutableSet *set = [NSMutableSet set];
+    
+    for (NSInteger row = 0; row < NumRows; row++) {
+        for (NSInteger column = 0; column < NumColumns - 2; ) {
+            // Skip over any gaps in the level design
+            if (_cookies[column][row] != nil) {
+                NSUInteger matchType = _cookies[column][row].cookieType;
+                
+                if (_cookies[column + 1][row].cookieType == matchType &&
+                    _cookies[column + 2][row].cookieType == matchType) {
+                    
+                    Chain *chain = [[Chain alloc] init];
+                    chain.chainType = ChainTypeHorizontal;
+                    do {
+                        [chain addCookie:_cookies[column][row]];
+                        column += 1;
+                    } while (column < NumColumns && _cookies[column][row].cookieType == matchType);
+                    
+                    [set addObject:chain];
+                    continue;
+                }
+            }
+            column += 1;
+        }
+    }
+    return set;
+}
+
+- (NSSet *)detectVerticalMatches {
+    NSMutableSet *set = [NSMutableSet set];
+    
+    for (NSInteger column = 0; column < NumColumns; column++) {
+        for (NSInteger row = 0; row < NumRows - 2; ) {
+            if (_cookies[column][row] != nil) {
+                NSUInteger matchType = _cookies[column][row].cookieType;
+                
+                if (_cookies[column][row + 1].cookieType == matchType
+                    && _cookies[column][row + 2].cookieType == matchType) {
+                    
+                    Chain *chain = [[Chain alloc] init];
+                    chain.chainType = ChainTypeVertical;
+                    do {
+                        [chain addCookie:_cookies[column][row]];
+                        row += 1;
+                    }
+                    while (row < NumRows && _cookies[column][row].cookieType == matchType);
+                    
+                    [set addObject:chain];
+                    continue;
+                }
+            }
+            row += 1;
+        }
+    }
+    return set;
+}
+
+- (NSSet *)removeMatches {
+    NSSet *horizontalChains = [self detectHorizontalMatches];
+    NSSet *verticalChains = [self detectVerticalMatches];
+    
+    NSLog(@"Horizontal matches: %@", horizontalChains);
+    NSLog(@"Vertical matches: %@", verticalChains);
+    
+    return [horizontalChains setByAddingObjectsFromSet:verticalChains];
+}
+
 @end

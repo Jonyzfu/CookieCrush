@@ -83,7 +83,7 @@
             
             // Update the view
             [self.scene animateSwap:swap completion:^{
-                self.view.userInteractionEnabled = YES;
+                [self handleMatches];
             }];
         } else {
             [self.scene animateInvalidSwap:swap completion:^ {
@@ -99,6 +99,11 @@
     
     // Start the game.
     [self beginGame];
+}
+
+- (void)handleMatches {
+    NSSet *chains = [self.level removeMatches];
+    // Todo
 }
 
 - (BOOL)shouldAutorotate
