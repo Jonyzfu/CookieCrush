@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E2655341AE43BC000EFE1BC /* Grid.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 6E2655331AE43BC000EFE1BC /* Grid.atlas */; };
 		6EDCF9CD1AE037FC004135F0 /* Chomp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9C71AE037FC004135F0 /* Chomp.wav */; };
 		6EDCF9CE1AE037FC004135F0 /* Drip.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9C81AE037FC004135F0 /* Drip.wav */; };
 		6EDCF9CF1AE037FC004135F0 /* Error.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6EDCF9C91AE037FC004135F0 /* Error.wav */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E2655331AE43BC000EFE1BC /* Grid.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Grid.atlas; sourceTree = "<group>"; };
 		6EDCF9C71AE037FC004135F0 /* Chomp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chomp.wav; sourceTree = "<group>"; };
 		6EDCF9C81AE037FC004135F0 /* Drip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Drip.wav; sourceTree = "<group>"; };
 		6EDCF9C91AE037FC004135F0 /* Error.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Error.wav; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				6EF40A791ADDC29600AF8D0E /* Images.xcassets */,
 				6EDCF9C61AE037FC004135F0 /* Sounds */,
 				6EF40A9D1ADE069F00AF8D0E /* Levels */,
+				6E2655331AE43BC000EFE1BC /* Grid.atlas */,
 				6EF40A921ADDC35200AF8D0E /* Sprites.atlas */,
 				6EF40A7B1ADDC29600AF8D0E /* LaunchScreen.xib */,
 				6EF40A671ADDC29500AF8D0E /* Supporting Files */,
@@ -284,6 +287,7 @@
 				6EF40A7D1ADDC29600AF8D0E /* LaunchScreen.xib in Resources */,
 				6EDCF9CE1AE037FC004135F0 /* Drip.wav in Resources */,
 				6EF40AA71ADE069F00AF8D0E /* Level_4.json in Resources */,
+				6E2655341AE43BC000EFE1BC /* Grid.atlas in Resources */,
 				6EDCF9CF1AE037FC004135F0 /* Error.wav in Resources */,
 				6EF40AA51ADE069F00AF8D0E /* Level_2.json in Resources */,
 				6EDCF9D21AE037FC004135F0 /* Scrape.wav in Resources */,

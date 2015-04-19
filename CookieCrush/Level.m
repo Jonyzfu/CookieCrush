@@ -32,7 +32,7 @@ Tile *_tiles[NumColumns][NumRows];
     do {
         set = [self createInitialCookies];
         [self detectPossibleSwaps];
-        NSLog(@"possible swaps: %@", self.possibleSwaps);
+        // NSLog(@"possible swaps: %@", self.possibleSwaps);
     } while ([self.possibleSwaps count] == 0);
     return set;
 }
@@ -292,6 +292,9 @@ Tile *_tiles[NumColumns][NumRows];
 - (NSSet *)removeMatches {
     NSSet *horizontalChains = [self detectHorizontalMatches];
     NSSet *verticalChains = [self detectVerticalMatches];
+    
+    [self removeCookies:horizontalChains];
+    [self removeCookies:verticalChains];
     
     [self calculateScores:horizontalChains];
     [self calculateScores:verticalChains];

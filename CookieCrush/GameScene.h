@@ -34,5 +34,8 @@
 - (void)animateMatchedCookies:(NSSet *)chains completion:(dispatch_block_t)completion;
 - (void)animateFallingCookies:(NSArray *)columns completion:(dispatch_block_t)completion;
 - (void)animateNewCookies:(NSArray *)columns completion:(dispatch_block_t)completion;
+- (void)animateGameOver;
+- (void)animateBeginGame;
+- (void)removeAllCookiesSprites;
 
 @end

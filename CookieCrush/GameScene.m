@@ -17,12 +17,15 @@ static const CGFloat TileHeight = 36.0;
 @interface GameScene ()
 
 // This is the container for all the other layers and it’s centered on the screen.  Base Layer
-@property(strong, nonatomic) SKNode *gameLayer;
-@property(strong, nonatomic) SKNode *cookiesLayer;
-@property(strong, nonatomic) SKNode *tilesLayer;
+@property (strong, nonatomic) SKNode *gameLayer;
+@property (strong, nonatomic) SKNode *cookiesLayer;
+@property (strong, nonatomic) SKNode *tilesLayer;
 
-@property(assign, nonatomic) NSInteger swipeFromColumn;
-@property(assign, nonatomic) NSInteger swipeFromRow;
+@property (assign, nonatomic) NSInteger swipeFromColumn;
+@property (assign, nonatomic) NSInteger swipeFromRow;
+
+@property (strong, nonatomic) SKCropNode *cropLayer;
+@property (strong, nonatomic) SKNode *maskLayer;
 
 @end
 
@@ -38,6 +41,7 @@ static const CGFloat TileHeight = 36.0;
     }
     
     self.gameLayer = [SKNode node];
+    self.gameLayer.hidden = YES;
     [self addChild:self.gameLayer];
     
     CGPoint layerPosition = CGPointMake(-TileWidth * NumColumns / 2, - TileHeight * NumRows / 2);
@@ -46,9 +50,16 @@ static const CGFloat TileHeight = 36.0;
     self.tilesLayer.position = layerPosition;
     [self.gameLayer addChild:self.tilesLayer];
     
+    self.cropLayer = [SKCropNode node];
+    [self.gameLayer addChild:self.cropLayer];
+    
+    self.maskLayer = [SKNode node];
+    self.maskLayer.position = layerPosition;
+    self.cropLayer.maskNode = self.maskLayer;
+    
     self.cookiesLayer = [SKNode node];
     self.cookiesLayer.position = layerPosition;
-    [self.gameLayer addChild:self.cookiesLayer];
+    [self.cropLayer addChild:self.cookiesLayer];
     
     self.selectionSprite = [SKSpriteNode node];
     
@@ -61,6 +72,15 @@ static const CGFloat TileHeight = 36.0;
         sprite.position = [self pointForColumn:cookie.column row:cookie.row];
         [self.cookiesLayer addChild:sprite];
         cookie.sprite = sprite;
+        
+        cookie.sprite.alpha = 0;
+        cookie.sprite.xScale = cookie.sprite.yScale = 0.5;
+        
+        [cookie.sprite runAction:[SKAction sequence:@[
+                                                      [SKAction waitForDuration:0.2 withRange:0.3],
+                                                      [SKAction group:@[[SKAction fadeInWithDuration:0.2],
+                                                                        [SKAction scaleTo:1.0 duration:0.2]
+                                                                        ]]]]];
     }
 }
 
@@ -89,8 +109,35 @@ static const CGFloat TileHeight = 36.0;
     for (NSInteger row = 0; row < NumRows; row++) {
         for (NSInteger column = 0; column < NumColumns; column++) {
             if ([self.level tileAtColumn:column row:row] != nil) {
-                SKSpriteNode *tileNode = [SKSpriteNode spriteNodeWithImageNamed:@"Tile"];
+                SKSpriteNode *tileNode = [SKSpriteNode spriteNodeWithImageNamed:@"MaskTile"];
                 tileNode.position = [self pointForColumn:column row:row];
+                [self.maskLayer addChild:tileNode];
+            }
+        }
+    }
+    
+    for (NSInteger row = 0; row <= NumRows; row++) {
+        for (NSInteger column = 0; column <= NumColumns; column++) {
+            BOOL topLeft = (column > 0) && (row < NumRows)
+                                        && [self.level tileAtColumn:column - 1 row:row];
+            BOOL bottomLeft = (column > 0) && (row > 0)
+                                        && [self.level tileAtColumn:column - 1 row:row - 1];
+            BOOL topRight = (column < NumColumns) && (row < NumRows)
+                                        && [self.level tileAtColumn:column row:row];
+            BOOL bottomRight = (column < NumColumns) && (row > 0)
+                                        && [self.level tileAtColumn:column row:row - 1];
+            
+            // The tiles are named from 0 to 15, accroding to the bitmask that is made by
+            // combining these four values
+            NSUInteger value = topLeft | topRight << 1 | bottomLeft << 2 | bottomRight << 3;
+            
+            if (value != 0 && value != 6 && value != 9) {
+                NSString *name = [NSString stringWithFormat:@"Tile_%lu", (long)value];
+                SKSpriteNode *tileNode = [SKSpriteNode spriteNodeWithImageNamed:name];
+                CGPoint point = [self pointForColumn:column row:row];
+                point.x -= TileHeight / 2;
+                point.y -= TileHeight / 2;
+                tileNode.position = point;
                 [self.tilesLayer addChild:tileNode];
             }
         }
@@ -107,10 +154,10 @@ static const CGFloat TileHeight = 36.0;
             CGPoint newPosition = [self pointForColumn:cookie.column row:cookie.row];
             
             // The higher up the cookie is, the bigger the delay on the animation
-            NSTimeInterval delay = 0.05 + 0.15 * idx;
+            NSTimeInterval delay = 0.05 + 0.1 * idx;
             
             // The duration of the animation is based on how far the cookie has to fall
-            NSTimeInterval duration = ((cookie.sprite.position.y - newPosition.y) / TileHeight) * 0.1;
+            NSTimeInterval duration = ((cookie.sprite.position.y - newPosition.y) / TileHeight) * 0.05;
             
             // Calculate the longest animation
             longestDuration = MAX(longestDuration, duration + delay);
@@ -120,7 +167,7 @@ static const CGFloat TileHeight = 36.0;
             moveAction.timingMode = SKActionTimingEaseOut;
             [cookie.sprite runAction:[SKAction sequence:@[
                                                           [SKAction waitForDuration:delay],
-                                                          [SKAction group:@[moveAction, self.fallingCookieSound]]]]];
+                                                          [SKAction group:@[moveAction]]]]];
         }];
     }
     
@@ -142,9 +189,9 @@ static const CGFloat TileHeight = 36.0;
             [self.cookiesLayer addChild:sprite];
             cookie.sprite = sprite;
             
-            NSTimeInterval delay = 0.1 + 0.2 * ([array count] - idx - 1);
+            NSTimeInterval delay = 0.05 + 0.1 * ([array count] - idx - 1);
             
-            NSTimeInterval duration = (startRow - cookie.row) * 0.1;
+            NSTimeInterval duration = (startRow - cookie.row) * 0.05;
             longestDuration = MAX(longestDuration, duration + delay);
             
             CGPoint newPosition = [self pointForColumn:cookie.column row:cookie.row];
@@ -154,7 +201,7 @@ static const CGFloat TileHeight = 36.0;
             [cookie.sprite runAction:[SKAction sequence:@[
                                                          [SKAction waitForDuration:delay],
                                                          [SKAction group:@[
-                                                                           [SKAction fadeInWithDuration:0.05], moveAction, self.addCookieSound]]]]];
+                                                                           [SKAction fadeInWithDuration:0.05], moveAction]]]]];
         }];
     }
     
@@ -361,6 +408,26 @@ static const CGFloat TileHeight = 36.0;
     [scoreLabel runAction:[SKAction sequence:@[
                                                moveAction,
                                                [SKAction removeFromParent]]]];
+}
+
+#pragma mark - Animate the Transitions
+- (void)animateGameOver {
+    SKAction *action = [SKAction moveBy:CGVectorMake(0, -self.size.height) duration:0.3];
+    action.timingMode = SKActionTimingEaseIn;
+    [self.gameLayer runAction:action];
+}
+
+- (void)animateBeginGame {
+    self.gameLayer.hidden = NO;
+    
+    self.gameLayer.position = CGPointMake(0, self.size.height);
+    SKAction *action = [SKAction moveBy:CGVectorMake(0, -self.size.height) duration:0.3];
+    action.timingMode = SKActionTimingEaseOut;
+    [self.gameLayer runAction:action];
+}
+
+- (void)removeAllCookiesSprites {
+    [self.cookiesLayer removeAllChildren];
 }
 
 #pragma mark - Sounds Effection
