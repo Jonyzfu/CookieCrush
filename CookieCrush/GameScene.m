@@ -97,6 +97,99 @@ static const CGFloat TileHeight = 36.0;
     }
 }
 
+#pragma mark - Falling down
+- (void)animateFallingCookies:(NSArray *)columns completion:(dispatch_block_t)completion {
+    // Have to compute the falling cookies
+    __block NSTimeInterval longestDuration = 0;
+    
+    for (NSArray *array in columns) {
+        [array enumerateObjectsUsingBlock:^(Cookie *cookie, NSUInteger idx, BOOL *stop) {
+            CGPoint newPosition = [self pointForColumn:cookie.column row:cookie.row];
+            
+            // The higher up the cookie is, the bigger the delay on the animation
+            NSTimeInterval delay = 0.05 + 0.15 * idx;
+            
+            // The duration of the animation is based on how far the cookie has to fall
+            NSTimeInterval duration = ((cookie.sprite.position.y - newPosition.y) / TileHeight) * 0.1;
+            
+            // Calculate the longest animation
+            longestDuration = MAX(longestDuration, duration + delay);
+            
+            // Perform the animation
+            SKAction *moveAction = [SKAction moveTo:newPosition duration:duration];
+            moveAction.timingMode = SKActionTimingEaseOut;
+            [cookie.sprite runAction:[SKAction sequence:@[
+                                                          [SKAction waitForDuration:delay],
+                                                          [SKAction group:@[moveAction, self.fallingCookieSound]]]]];
+        }];
+    }
+    
+    [self runAction:[SKAction sequence:@[
+                                         [SKAction waitForDuration:longestDuration],
+                                         [SKAction runBlock:completion]
+                                         ]]];
+}
+
+- (void)animateNewCookies:(NSArray *)columns completion:(dispatch_block_t)completion {
+    __block NSTimeInterval longestDuration = 0;
+    
+    for (NSArray *array in columns) {
+        NSInteger startRow = ((Cookie *)[array firstObject]).row + 1;
+        [array enumerateObjectsUsingBlock:^(Cookie *cookie, NSUInteger idx, BOOL *stop) {
+            // Create a new sprite for the cookie
+            SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:[cookie spriteName]];
+            sprite.position = [self pointForColumn:cookie.column row:startRow];
+            [self.cookiesLayer addChild:sprite];
+            cookie.sprite = sprite;
+            
+            NSTimeInterval delay = 0.1 + 0.2 * ([array count] - idx - 1);
+            
+            NSTimeInterval duration = (startRow - cookie.row) * 0.1;
+            longestDuration = MAX(longestDuration, duration + delay);
+            
+            CGPoint newPosition = [self pointForColumn:cookie.column row:cookie.row];
+            SKAction *moveAction = [SKAction moveTo:newPosition duration:duration];
+            moveAction.timingMode = SKActionTimingEaseOut;
+            cookie.sprite.alpha = 0;
+            [cookie.sprite runAction:[SKAction sequence:@[
+                                                         [SKAction waitForDuration:delay],
+                                                         [SKAction group:@[
+                                                                           [SKAction fadeInWithDuration:0.05], moveAction, self.addCookieSound]]]]];
+        }];
+    }
+    
+    [self runAction:[SKAction sequence:@[
+                                         [SKAction waitForDuration:longestDuration],
+                                         [SKAction runBlock:completion]]]];
+}
+
+#pragma mark - Remove Matches
+- (void)animateMatchedCookies:(NSSet *)chains completion:(dispatch_block_t)completion {
+    for (Chain *chain in chains) {
+        [self animateScoreForChain:chain];
+        for (Cookie *cookie in chain.cookies) {
+            // This check ensures that you only animate the sprite once
+            if (cookie.sprite != nil) {
+                // Put a scaling animation on the cookie sprite to shrink its size
+                SKAction *scaleAction = [SKAction scaleTo:0.1 duration:0.3];
+                scaleAction.timingMode = SKActionTimingEaseOut;
+                [cookie.sprite runAction:[SKAction sequence:@[scaleAction, [SKAction removeFromParent]]]];
+                
+                // Remove the link between the cookie and its sprite
+                cookie.sprite = nil;
+            }
+        }
+    }
+    
+    [self runAction:self.matchSound];
+    
+    // Continue with the rest of the game
+    [self runAction:[SKAction sequence:@[
+                                         [SKAction waitForDuration:0.3],
+                                         [SKAction runBlock:completion]
+                                         ]]];
+}
+
 #pragma mark - Highlighted Selection
 - (void)showSelectionIndicatorForCookie:(Cookie *)cookie {
     // If the selection indicator is still visible, then first remove it
@@ -246,6 +339,30 @@ static const CGFloat TileHeight = 36.0;
     [self runAction:self.invalidSwapSound];
 }
 
+#pragma mark - Point Values
+- (void)animateScoreForChain:(Chain *)chain {
+    // Figure out what the midpoint of the chain is
+    Cookie *firstCookie = [chain.cookies firstObject];
+    Cookie *lastCookie = [chain.cookies lastObject];
+    CGPoint centerPosition = CGPointMake(
+                                         (firstCookie.sprite.position.x + lastCookie.sprite.position.x) / 2,
+                                         (firstCookie.sprite.position.y + lastCookie.sprite.position.y) / 2 - 8);
+    
+    // Add a label for the score that slowly floats up
+    SKLabelNode *scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"GillSans-BoldItalic"];
+    scoreLabel.fontSize = 16;
+    scoreLabel.text = [NSString stringWithFormat:@"%lu", (long)chain.score];
+    scoreLabel.position = centerPosition;
+    scoreLabel.zPosition = 300;
+    [self.cookiesLayer addChild:scoreLabel];
+    
+    SKAction *moveAction = [SKAction moveBy:CGVectorMake(0, 3) duration:0.7];
+    moveAction.timingMode = SKActionTimingEaseOut;
+    [scoreLabel runAction:[SKAction sequence:@[
+                                               moveAction,
+                                               [SKAction removeFromParent]]]];
+}
+
 #pragma mark - Sounds Effection
 - (void)preloadResources {
     self.swapSound = [SKAction playSoundFileNamed:@"Chomp.wav" waitForCompletion:NO];
@@ -253,6 +370,7 @@ static const CGFloat TileHeight = 36.0;
     self.matchSound = [SKAction playSoundFileNamed:@"Ka-Ching.wav" waitForCompletion:NO];
     self.fallingCookieSound = [SKAction playSoundFileNamed:@"Scrape.wav" waitForCompletion:NO];
     self.addCookieSound = [SKAction playSoundFileNamed:@"Drip.wav" waitForCompletion:NO];
+    [SKLabelNode labelNodeWithFontNamed:@"GillSans-BoldItalic"];
 }
 
 

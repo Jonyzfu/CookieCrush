@@ -15,6 +15,14 @@
 @property(strong, nonatomic) Level *level;
 @property(strong, nonatomic) GameScene *scene;
 
+@property(assign, nonatomic) NSUInteger movesLeft;
+@property(assign, nonatomic) NSUInteger score;
+
+@property (weak, nonatomic) IBOutlet UILabel *targetLabel;
+@property (weak, nonatomic) IBOutlet UILabel *movesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+
+
 @end
 
 @implementation SKScene (Unarchive)
@@ -39,6 +47,10 @@
 @implementation GameViewController
 
 - (void)beginGame {
+    self.movesLeft = self.level.maximumMoves;
+    self.score = 0;
+    [self updateLabels];
+    [self.level resetComboMultiplier];
     [self shuffle];
 }
 
@@ -101,9 +113,40 @@
     [self beginGame];
 }
 
+- (void)updateLabels {
+    self.targetLabel.text = [NSString stringWithFormat:@"%lu", (long)self.level.targetScore];
+    self.movesLabel.text = [NSString stringWithFormat:@"%lu", (long)self.movesLeft];
+    self.scoreLabel.text = [NSString stringWithFormat:@"%lu", (long)self.score];
+}
+
 - (void)handleMatches {
     NSSet *chains = [self.level removeMatches];
-    // Todo
+    if ([chains count] == 0) {
+        [self beginNextTurn];
+        return;
+    }
+    
+    for (Chain *chain in chains) {
+        self.score += chain.score;
+    }
+    [self updateLabels];
+    
+    [self.scene animateMatchedCookies:chains completion:^{
+        
+        NSArray *columns = [self.level fillHoles];
+        [self.scene animateFallingCookies:columns completion:^{
+            NSArray *columns = [self.level topUpCookies];
+            [self.scene animateNewCookies:columns completion:^{
+                [self handleMatches];
+            }];
+        }];
+    }];
+}
+
+- (void)beginNextTurn {
+    [self.level resetComboMultiplier];
+    [self.level detectPossibleSwaps];
+    self.view.userInteractionEnabled = YES;
 }
 
 - (BOOL)shouldAutorotate

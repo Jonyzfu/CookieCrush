@@ -10,7 +10,8 @@
 
 @interface Level ()
 
-@property(strong, nonatomic) NSSet *possibleSwaps;
+@property (strong, nonatomic) NSSet *possibleSwaps;
+@property (assign, nonatomic) NSUInteger comboMultiplier;
 
 @end
 
@@ -160,6 +161,8 @@ Tile *_tiles[NumColumns][NumRows];
     if (self != nil) {
         NSDictionary *dictionary = [self loadJSON:filename];
         
+        self.targetScore = [dictionary[@"targetScore"] unsignedIntegerValue];
+        self.maximumMoves = [dictionary[@"moves"] unsignedIntegerValue];
         // Loop through the rows
         [dictionary[@"tiles"] enumerateObjectsUsingBlock:^(NSArray *array, NSUInteger row, BOOL *stop) {
             
@@ -290,10 +293,97 @@ Tile *_tiles[NumColumns][NumRows];
     NSSet *horizontalChains = [self detectHorizontalMatches];
     NSSet *verticalChains = [self detectVerticalMatches];
     
-    NSLog(@"Horizontal matches: %@", horizontalChains);
-    NSLog(@"Vertical matches: %@", verticalChains);
+    [self calculateScores:horizontalChains];
+    [self calculateScores:verticalChains];
     
     return [horizontalChains setByAddingObjectsFromSet:verticalChains];
 }
+
+- (void)removeCookies:(NSSet *)chains {
+    for (Chain *chain in chains) {
+        for (Cookie *cookie in chain.cookies) {
+            _cookies[cookie.column][cookie.row] = nil;
+        }
+    }
+}
+
+- (NSArray *)fillHoles {
+    NSMutableArray *columns = [NSMutableArray array];
+    
+    // Loop through the rows, from bottom to top
+    for (NSInteger column = 0; column < NumColumns; column++) {
+        NSMutableArray *array;
+        for (NSInteger row = 0; row < NumRows; row++) {
+            // Detect the hole
+            if (_tiles[column][row] != nil && _cookies[column][row] == nil) {
+                // Scan upward to find the cookie that sits directly above the hole
+                for (NSInteger lookup = row + 1; lookup < NumRows; lookup++) {
+                    Cookie *cookie = _cookies[column][lookup];
+                    if (cookie != nil) {
+                        // Moves the cookie down
+                        _cookies[column][lookup] = nil;
+                        _cookies[column][row] = cookie;
+                        cookie.row = row;
+                        
+                        // Add the cookie to the array. Each column gets its own array.
+                        if (array == nil) {
+                            array = [NSMutableArray array];
+                            [columns addObject:array];
+                        }
+                        [array addObject:cookie];
+                        
+                        // Once found a cookie, no need to scan up any further
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return columns;
+}
+
+- (NSArray *)topUpCookies {
+    NSMutableArray *columns = [NSMutableArray array];
+    NSUInteger cookieType = 0;
+    for (NSInteger column = 0; column < NumColumns; column++) {
+        NSMutableArray *array;
+        
+        // Loop through the column from top to bottom
+        for (NSInteger row = NumRows - 1; row >= 0 && _cookies[column][row] == nil; row--) {
+            // Ignore the gaps in the level
+            if (_tiles[column][row] != nil) {
+                // Randomly create a new cookie type
+                NSUInteger newCookieType;
+                do {
+                    newCookieType = arc4random_uniform(NumCookieTypes) + 1;
+                } while (newCookieType == cookieType);
+                cookieType = newCookieType;
+                
+                // Create the new Cookie object
+                Cookie *cookie = [self createCookieAtColumn:column row:row withType:cookieType];
+                
+                // Add the cookie to the array for this column
+                if (array == nil) {
+                    array = [NSMutableArray array];
+                    [columns addObject:array];
+                }
+                [array addObject:cookie];
+            }
+        }
+    }
+    return columns;
+}
+
+- (void)calculateScores:(NSSet *)chains {
+    for (Chain *chain in chains) {
+        chain.score = 60 * ([chain.cookies count] - 2) * self.comboMultiplier;
+        self.comboMultiplier++;
+    }
+}
+
+- (void)resetComboMultiplier {
+    self.comboMultiplier = 1;
+}
+
 
 @end
